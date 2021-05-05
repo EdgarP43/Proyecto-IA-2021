@@ -29,7 +29,7 @@ import java.util.Hashtable;
  */
 public class Archivo {
 
-    ArrayList<Lenguaje> hashemocion = new ArrayList<Lenguaje> ();
+    ArrayList<Lenguaje> hashLenguajes = new ArrayList<Lenguaje> ();
     
     ArrayList Lenguajes = new ArrayList();
     public String ruta = "";
@@ -40,7 +40,8 @@ public class Archivo {
     public int columna = 0;
     public ArrayList<String> palabras;
     public String bowactual = "";
-    public BigDecimal  DenominadorF = BigDecimal.valueOf(0);
+    public BigDecimal  frasesTotales = BigDecimal.valueOf(0);
+    public BigDecimal  palabrasTotales = BigDecimal.valueOf(0);
     public String salida = "";
     public Hashtable<String, BigDecimal> probabilidades = new Hashtable<>();
     public Hashtable<String, BigDecimal> probabilidades2 = new Hashtable<>();
@@ -71,6 +72,7 @@ public class Archivo {
             while ((char) caracter != '|') {
                 // Cada palabra se agrega al array
                 palabras.add(ObtenerPalabra(fr).toLowerCase().trim());
+                palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(1));
             }
             LeerCaracter(fr);
             IgnorarEspacios(fr);
@@ -96,7 +98,7 @@ public class Archivo {
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error de lectura",
+            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo",
                     "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -109,9 +111,9 @@ public class Archivo {
                 LeerCaracter(fr);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error de lectura del fichero",
+            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo del fichero",
                     "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
-            //System.out.println("Error de lectura del fichero");
+            //System.out.println("Error de pruebaArchivo del fichero");
             System.exit(1);
         }
     }
@@ -142,7 +144,7 @@ public class Archivo {
             IgnorarEspacios(fr);
             return palabra;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error de lectura",
+            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo",
                     "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
             return "";
@@ -161,28 +163,34 @@ public class Archivo {
     //Ln Ln = new Ln();
     private void MeterPalabrasEnBoW() 
     {
-        DenominadorF = DenominadorF.add(BigDecimal.valueOf(1));
+        frasesTotales = frasesTotales.add(BigDecimal.valueOf(1));
         
+        //Evalua si el lenguaje ya está agregado
         if (Lenguajes.contains(bowactual))
         {   int n  = 0;
-            for (int i = 0; i < hashemocion.size(); i++) 
+            //Se posiciona en el lenguaje adecuado
+            for (int i = 0; i < hashLenguajes.size(); i++) 
             {
-                if(hashemocion.get(i).nombre.equals(bowactual))
+                if(hashLenguajes.get(i).nombre.equals(bowactual))
                 {
                    n = i;
                    break;
                 }
-            }            
-            hashemocion.get(n).Denominador = hashemocion.get(n).Denominador+1;
+            }        
+            //Denominador lleva el conteo de frases
+            hashLenguajes.get(n).Denominador = hashLenguajes.get(n).Denominador+1;
+            //Por cada palabra se evalua si ya está agregada al bow o sino se agrega
             for (int i = 0; i < palabras.size(); i++) 
             {
-                if(hashemocion.get(n).palabras.containsKey(palabras.get(i)))
+                if(hashLenguajes.get(n).palabras.containsKey(palabras.get(i)))
                 {
-                    hashemocion.get(n).palabras.replace(palabras.get(i), hashemocion.get(n).palabras.get(palabras.get(i)).add(BigDecimal.valueOf(1)));
+                    //Si ya está agregada se aumenta su frecuencia
+                    hashLenguajes.get(n).palabras.replace(palabras.get(i), hashLenguajes.get(n).palabras.get(palabras.get(i)).add(BigDecimal.valueOf(1)));
                 }
                 else
                 {
-                    hashemocion.get(n).palabras.put(palabras.get(i),BigDecimal.valueOf(1));
+                    //Si no está agregada se agrega al bow
+                    hashLenguajes.get(n).palabras.put(palabras.get(i),BigDecimal.valueOf(1));
                 }
 
             }
@@ -190,20 +198,22 @@ public class Archivo {
         }
         else
         {
+            //Se agrega el lenguaje a la hash de lenguajes
             Lenguajes.add(bowactual);
-            hashemocion.add(new Lenguaje());
-            hashemocion.get(hashemocion.size()-1).nombre = bowactual;
-            int n = hashemocion.size()-1;
-            hashemocion.get(n).Denominador = 1;
+            hashLenguajes.add(new Lenguaje());
+            hashLenguajes.get(hashLenguajes.size()-1).nombre = bowactual;
+            int n = hashLenguajes.size()-1;
+            hashLenguajes.get(n).Denominador = 1;
+            //Realizamos el mismo proceso de arriba solo que con la primera frase de ese idioma
             for (int i = 0; i < palabras.size(); i++) 
             {
-                if(hashemocion.get(n).palabras.containsKey(palabras.get(i)))
+                if(hashLenguajes.get(n).palabras.containsKey(palabras.get(i)))
                 {
-                    hashemocion.get(n).palabras.replace(palabras.get(i), hashemocion.get(n).palabras.get(palabras.get(i)).add(BigDecimal.valueOf(1)));
+                    hashLenguajes.get(n).palabras.replace(palabras.get(i), hashLenguajes.get(n).palabras.get(palabras.get(i)).add(BigDecimal.valueOf(1)));
                 }
                 else
                 {
-                    hashemocion.get(n).palabras.put(palabras.get(i),BigDecimal.valueOf(1));
+                    hashLenguajes.get(n).palabras.put(palabras.get(i),BigDecimal.valueOf(1));
                 }
 
             }
@@ -214,46 +224,53 @@ public class Archivo {
     
     int ProbaActual =0;
     // Método pendiente de evaluar
-    public void generarEstadistica(String PalabraEntrada)
-    {   // aux suma es las veces totales que ha aparecido esa palabra en todos los datos
-        BigDecimal AuxSuma = BigDecimal.valueOf(0);
-        for (int i = 0; i < hashemocion.size(); i++) 
+    public void generarInferencia(String palabraEntrada)
+    {   // Veces totales que ha aparecido esa palabra en todos los datos
+        BigDecimal contPalabraTotal = BigDecimal.valueOf(0);
+        //Por cada lenguaje evalua si la palabra pertenece, si pertenece se suma su frecuencia
+        for (int i = 0; i < hashLenguajes.size(); i++) 
         {
-            if(hashemocion.get(i).palabras.containsKey(PalabraEntrada))
+            if(hashLenguajes.get(i).palabras.containsKey(palabraEntrada))
             {
-                AuxSuma = AuxSuma.add(hashemocion.get(i).palabras.get(PalabraEntrada));
+                contPalabraTotal = contPalabraTotal.add(hashLenguajes.get(i).palabras.get(palabraEntrada));
             }
         }
-        // se va sumnado 
-        for (int i = 0; i < hashemocion.size(); i++) 
+        for (int i = 0; i < hashLenguajes.size(); i++) 
         {
-            // este denominador lo que tiene es cuantas veces esa emocion ha aparecido
-            int denominador = hashemocion.get(i).Denominador;
-            if(hashemocion.get(i).palabras.containsKey(PalabraEntrada))
+            // Cuantas veces ha aparecido el lenguaje
+            int contLenguaje = hashLenguajes.get(i).Denominador;
+            //Evalua si esa palabra pertenece al lenguaje actual
+            if(hashLenguajes.get(i).palabras.containsKey(palabraEntrada))
             {
-                // esta metodo es la ecuarcion de bayes la que dice (p1/p2) = ((p2/p1) * p1)/p2)
-                BigDecimal P1 = (hashemocion.get(i).palabras.get(PalabraEntrada));
-                P1 = P1.divide(BigDecimal.valueOf(denominador), 100, RoundingMode.HALF_UP);
-                BigDecimal P2 = BigDecimal.valueOf(denominador).divide(DenominadorF ,100, RoundingMode.HALF_UP);
+                // esta metodo es la ecuarcion de bayes la que dice (p1|p2) = ((p2|p1) * p1)/p2)
+                //Probabilidad de palabra dado lenguaje: (p2 | p1)
+                //Conteo de la palabra en ese lenguaje
+                BigDecimal P1 = (hashLenguajes.get(i).palabras.get(palabraEntrada));
+                //Se divide dentro del conteo de lenguaje
+                P1 = P1.divide(BigDecimal.valueOf(contLenguaje), 100, RoundingMode.HALF_UP);
+                //Veces en que ha aparecido el lenguaje dividido las frases totales (P1)
+                BigDecimal P2 = BigDecimal.valueOf(contLenguaje).divide(frasesTotales ,100, RoundingMode.HALF_UP);
+                //Multiplica los dos terminos del numerador
                 BigDecimal Total = (P1.multiply(P2));
-                Total =   Total.divide(AuxSuma.divide(DenominadorF,100, RoundingMode.HALF_UP),100, RoundingMode.HALF_UP);
+                //Lo divide dentro de la probabilidad de la palabra (conteo de la palabra dividido frases totales)
+                Total =   Total.divide(contPalabraTotal.divide(palabrasTotales,100, RoundingMode.HALF_UP),100, RoundingMode.HALF_UP);
                 
                 if (probabilidades.isEmpty()) 
                 {
-                    probabilidades.put(hashemocion.get(i).nombre, Total);
+                    probabilidades.put(hashLenguajes.get(i).nombre, Total);
                 }
                 else
                 {
                    
-                    if(probabilidades.containsKey(hashemocion.get(i).nombre))
+                    if(probabilidades.containsKey(hashLenguajes.get(i).nombre))
                     {
                         // esto es para multiplicar si esa emocion ya tenia una probabilidad hay que multiplicarla
-                       probabilidades.replace(hashemocion.get(i).nombre, probabilidades.get(hashemocion.get(i).nombre).multiply(Total,MathContext.DECIMAL128));
+                       probabilidades.replace(hashLenguajes.get(i).nombre, probabilidades.get(hashLenguajes.get(i).nombre).multiply(Total,MathContext.DECIMAL128));
 
                     }
                     else
                     {
-                        probabilidades.put(hashemocion.get(i).nombre, Total);
+                        probabilidades.put(hashLenguajes.get(i).nombre, Total);
                         
                     }
 
@@ -267,47 +284,33 @@ public class Archivo {
     }
     
     ArrayList<String> Escritor = new ArrayList<>();
-    public void lectura(String Ruta) 
+    public void pruebaArchivo(String Ruta) 
     {
         String ORIGINAL = "ÁáÉéÍíÓóÚúÑñÜü";
         String REPLACEMENT= "AaEeIiOoUuNnUu";
     
         try 
         {
-          
-          FileInputStream fis = new FileInputStream(Ruta);  
-          InputStreamReader is = new InputStreamReader(fis,"ISO-8859-1");
-          BufferedReader bf = new BufferedReader(is);
-
-//          FileReader fr = new FileReader(Ruta);
-//          BufferedReader br = new BufferedReader(fr);
+           
+          fr = new FileReader(Ruta);
+          BufferedReader bf = new BufferedReader(fr);
 
           String linea;
-          
-          
-          
+         //Evaluamos la frase completa
           while((linea = bf.readLine()) != null)
           {
                 linea = linea.toLowerCase();
-                linea = linea.replace(",", "");
-                linea = linea.replace(".", "");
-                linea = linea.replace(";", "");
-                linea = linea.replace(":", "");
-                linea = linea.replace('á', 'a');
-                linea = linea.replace('é', 'e');
-                linea = linea.replace('í', 'i');
-                linea = linea.replace('ó', 'o');
-                linea = linea.replace('ú', 'u');
-                linea = linea.replace('ñ', 'n');
                 
+              //Separamos cada palabra de la frase
               String[] pa = linea.split(" ");
               for (int i = 0; i < pa.length; i++) 
               {
                   pa[i] = pa[i].toLowerCase().trim();
-                  generarEstadistica(pa[i]);   
+                  //Enviamos palabra al metodo para generar las probabilidades
+                  generarInferencia(pa[i]);   
               }
-              // desde aqui solo es para saber que emocion es mayor con normalisacion
-              ProbaActual = 0;
+              //Evaluar que lenguaje tiene más elementos
+               ProbaActual = 0;
                BigDecimal Deno = BigDecimal.valueOf(0);
                Enumeration e = probabilidades.keys();
                 while (e.hasMoreElements()) 
@@ -316,7 +319,7 @@ public class Archivo {
                   Deno = Deno.add(probabilidades.get(key),MathContext.DECIMAL128);
                 }
                 e = probabilidades.keys();
-                String emocionguardada = "";
+                String lenguajeGuardado = "";
                 BigDecimal Var1 = new BigDecimal(0);
                 while (e.hasMoreElements()) 
                 {
@@ -325,25 +328,25 @@ public class Archivo {
                    BigDecimal Var2 = probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP);
                    if(probabilidades2.isEmpty())
                    {
-                       emocionguardada = key;
+                       lenguajeGuardado = key;
                        
                        probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
-                       Var1 = probabilidades2.get(emocionguardada);
+                       Var1 = probabilidades2.get(lenguajeGuardado);
                    }
                    else if(Var1.compareTo(Var2) == -1)
                    {
                        probabilidades2 = new Hashtable<>();
-                       emocionguardada = key ;
+                       lenguajeGuardado = key ;
                        probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
                    }
 
                 }
-                if(!emocionguardada.equals(""))
+                if(!lenguajeGuardado.equals(""))
                 {
-                    String temp = linea + " | " + emocionguardada +" Con una probabilidad de "+( probabilidades2.get(emocionguardada));
+                    String temp = linea + " | " + lenguajeGuardado +" Con una probabilidad de "+( probabilidades2.get(lenguajeGuardado));
                     System.out.println(temp);
                     salida += "• " + temp + "\r\n \r\n";
-                    Escritor.add(linea + " | "+  emocionguardada);
+                    Escritor.add(linea + " | "+  lenguajeGuardado);
                     probabilidades = new Hashtable<>();
                     probabilidades2 = new Hashtable<>(); 
                 }
@@ -351,12 +354,13 @@ public class Archivo {
                 {
                     String temp = linea + " | " +"No existe probabilidad , ninguna de las palabras pertenece al conjunto";
                     System.out.println(temp);
-                    salida += "• " + temp + "\r\n \r\n";
+                    salida += "# " + temp + "\r\n \r\n";
                 }
           }
             
         fr.close();
         
+        //Escritura del archivo de salida
         File archivo = new File("Salida");
         BufferedWriter bw;
         if(archivo.exists()) 

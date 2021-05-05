@@ -346,9 +346,9 @@ public class MenuP extends javax.swing.JFrame {
     private void btn_generar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generar1ActionPerformed
         // TODO add your handling code here:
         taResultados.setText("");
-        archivo.output = "";
-        archivo.lectura(ruta_Prueba);
-        taResultados.append(archivo.output);
+        archivo.salida = "";
+        archivo.pruebaArchivo(ruta_Prueba);
+        taResultados.append(archivo.salida);
     }//GEN-LAST:event_btn_generar1ActionPerformed
     Archivo archivo = new Archivo();
     /**
