@@ -86,6 +86,34 @@ public class Archivo {
         }
     }
     
+    public void leerFrases(String frases){
+        String[] frasesEntrenamiento;
+        String[] frase;
+        String[] palabrasEnFrase;
+        
+        frasesEntrenamiento = frases.trim().toLowerCase().split("\n");
+        
+        for (int i = 0; i < frasesEntrenamiento.length; i++) {
+            palabras = new ArrayList<>();
+            
+            frase = frasesEntrenamiento[i].split("\\|");
+            palabrasEnFrase = frase[0].trim().split(" ");
+            
+            palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(palabrasEnFrase.length));
+            bowactual = frase[1].trim();
+            
+            for (int j = 0; j < palabrasEnFrase.length; j++) {
+                if(!palabrasEnFrase[j].equals("")){
+                    palabras.add(palabrasEnFrase[j]);
+                }
+                
+            }
+            
+            CrearBoW();
+            MeterPalabrasEnBoW();
+        }
+    }
+    
     // lee un caracterer
     public void LeerCaracter(FileReader fr) {
         try {
@@ -328,7 +356,7 @@ public class Archivo {
                    BigDecimal Var2 = probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP);
                    if(probabilidades2.isEmpty())
                    {
-                       lenguajeGuardado = key;
+                       lenguajeGuardado = key.trim();
                        
                        probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
                        Var1 = probabilidades2.get(lenguajeGuardado);
@@ -343,7 +371,7 @@ public class Archivo {
                 }
                 if(!lenguajeGuardado.equals(""))
                 {
-                    String temp = linea + " | " + lenguajeGuardado +" Con una probabilidad de "+( probabilidades2.get(lenguajeGuardado));
+                    String temp = linea + " | " + lenguajeGuardado +" con una probabilidad de: "+( probabilidades2.get(lenguajeGuardado));
                     System.out.println(temp);
                     salida += "• " + temp + "\r\n \r\n";
                     Escritor.add(linea + " | "+  lenguajeGuardado);
@@ -361,7 +389,7 @@ public class Archivo {
         fr.close();
         
         //Escritura del archivo de salida
-        File archivo = new File("Salida");
+        File archivo = new File("Salida.txt");
         BufferedWriter bw;
         if(archivo.exists()) 
         {
@@ -374,20 +402,120 @@ public class Archivo {
         } 
         else 
         {
-          bw = new BufferedWriter(new FileWriter(archivo));
-             for (int i = 0; i < Escritor.size(); i++) 
-             {
-                bw.write(Escritor.get(i));
-                bw.newLine();
-             }
+            archivo.createNewFile();
+            bw = new BufferedWriter(new FileWriter(archivo));
+            
+            for (int i = 0; i < Escritor.size(); i++) 
+            {
+               bw.write(Escritor.get(i));
+               bw.newLine();
+            }
         }
         
         bw.close();
-        CargarArchivo("Salida", "Entrada");
+        CargarArchivo("Salida.txt", "Entrada");
         LeerArchivo();
         }
         catch(Exception e) 
         {
+          System.out.println("Excepcion leyendo fichero"  + e);
+        }
+    }
+    
+    public void probarFrases(String frasesPrueba){
+        String[] frases;
+        String[] palabrasEnFrase;
+        frases = frasesPrueba.trim().toLowerCase().split("\n");
+        
+        for (String f: frases) {
+            f = f.trim();
+            palabrasEnFrase = f.split(" ");
+            
+            for (String p: palabrasEnFrase){
+                if(!p.equals("")){
+                    generarInferencia(p);
+                }
+            }
+            
+            ProbaActual = 0;
+            BigDecimal Deno = BigDecimal.valueOf(0);
+            Enumeration e = probabilidades.keys();
+
+            while (e.hasMoreElements()) 
+            {
+              String key = (String) e.nextElement();
+              Deno = Deno.add(probabilidades.get(key),MathContext.DECIMAL128);
+            }
+            e = probabilidades.keys();
+            String lenguajeGuardado = "";
+            BigDecimal Var1 = new BigDecimal(0);
+
+            while (e.hasMoreElements()) 
+            {
+               String key = (String) e.nextElement();
+
+               BigDecimal Var2 = probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP);
+               if(probabilidades2.isEmpty())
+               {
+                   lenguajeGuardado = key;
+
+                   probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+                   Var1 = probabilidades2.get(lenguajeGuardado);
+               }
+               else if(Var1.compareTo(Var2) == -1)
+               {
+                   probabilidades2 = new Hashtable<>();
+                   lenguajeGuardado = key.trim();
+                   probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+               }
+
+            }
+            if(!lenguajeGuardado.equals(""))
+            {
+                String temp = f + " | " + lenguajeGuardado +" con una probabilidad de: " + ( probabilidades2.get(lenguajeGuardado));
+                System.out.println(temp);
+                salida += "• " + temp + "\r\n \r\n";
+                Escritor.add(f + " | "+  lenguajeGuardado);
+                probabilidades = new Hashtable<>();
+                probabilidades2 = new Hashtable<>(); 
+            }
+            else
+            {
+                String temp = f + " | " +"No existe probabilidad , ninguna de las palabras pertenece al conjunto";
+                System.out.println(temp);
+                salida += "# " + temp + "\r\n \r\n";
+            }
+        }
+        
+        try{
+            File archivo = new File("Salida.txt");
+            BufferedWriter bw;
+            if(archivo.exists()) 
+            {
+                 bw = new BufferedWriter(new FileWriter(archivo));
+                 for (int i = 0; i < Escritor.size(); i++) 
+                 {
+                    bw.write(Escritor.get(i));
+                    bw.newLine();
+                }
+            } 
+            else 
+            {
+                archivo.createNewFile();
+                bw = new BufferedWriter(new FileWriter(archivo));
+
+                for (int i = 0; i < Escritor.size(); i++) 
+                {
+                   bw.write(Escritor.get(i));
+                   bw.newLine();
+                }
+            }
+
+            bw.close();
+            CargarArchivo("Salida.txt", "Entrada");
+            LeerArchivo();
+        }
+        catch(Exception e){
           System.out.println("Excepcion leyendo fichero"  + e);
         }
     }

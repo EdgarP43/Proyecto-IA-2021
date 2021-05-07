@@ -38,22 +38,21 @@ public class MenuP extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         tabbedpane = new javax.swing.JTabbedPane();
         panel1 = new javax.swing.JPanel();
-        tbx_ruta_archivo = new javax.swing.JTextField();
+        tbxRutaArchivoEntrenamiento = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        btn_examinar1 = new javax.swing.JButton();
-        btn_generar = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
+        btnExaminarEntrenamiento = new javax.swing.JButton();
+        btnEntrenar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        taFrasesEntrenamiento = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        tbx_ruta_archivo1 = new javax.swing.JTextField();
-        btn_examinar3 = new javax.swing.JButton();
+        tbxRutaArchivoPrueba = new javax.swing.JTextField();
+        btnExaminarPrueba = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        btn_generar1 = new javax.swing.JButton();
+        btnEvaluar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        taFrasesPrueba = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -64,12 +63,15 @@ public class MenuP extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Ebrima", 1, 24)); // NOI18N
         jLabel1.setText("CLASIFICADOR DE TEXTO");
 
+        tabbedpane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+
         panel1.setBackground(new java.awt.Color(51, 51, 51));
         panel1.setForeground(new java.awt.Color(255, 255, 255));
 
-        tbx_ruta_archivo.addActionListener(new java.awt.event.ActionListener() {
+        tbxRutaArchivoEntrenamiento.setEditable(false);
+        tbxRutaArchivoEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbx_ruta_archivoActionPerformed(evt);
+                tbxRutaArchivoEntrenamientoActionPerformed(evt);
             }
         });
 
@@ -77,35 +79,32 @@ public class MenuP extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Ruta archivo entrenador:");
 
-        btn_examinar1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_examinar1.setText("Examinar");
-        btn_examinar1.addActionListener(new java.awt.event.ActionListener() {
+        btnExaminarEntrenamiento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExaminarEntrenamiento.setText("Examinar");
+        btnExaminarEntrenamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_examinar1ActionPerformed(evt);
+                btnExaminarEntrenamientoActionPerformed(evt);
             }
         });
 
-        btn_generar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_generar.setText("Entrenar Modelo");
-        btn_generar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnEntrenar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnEntrenar.setText("Entrenar Modelo");
+        btnEntrenar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_generarMouseClicked(evt);
+                btnEntrenarMouseClicked(evt);
             }
         });
-        btn_generar.addActionListener(new java.awt.event.ActionListener() {
+        btnEntrenar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_generarActionPerformed(evt);
+                btnEntrenarActionPerformed(evt);
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("CLASIFICADOR DE TEXTO");
+        taFrasesEntrenamiento.setColumns(20);
+        taFrasesEntrenamiento.setRows(5);
+        jScrollPane4.setViewportView(taFrasesEntrenamiento);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane4.setViewportView(jTextArea2);
-
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Ingrese entrenamiento: (frase | idioma)");
 
@@ -113,60 +112,61 @@ public class MenuP extends javax.swing.JFrame {
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                        .addComponent(btn_generar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(186, 186, 186))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(139, 139, 139))))
             .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(19, 19, 19)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addComponent(tbx_ruta_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_examinar1))
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane4)
+                            .addGroup(panel1Layout.createSequentialGroup()
+                                .addComponent(tbxRutaArchivoEntrenamiento)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnExaminarEntrenamiento)))
+                        .addGap(26, 26, 26))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addContainerGap(190, Short.MAX_VALUE)
+                .addComponent(btnEntrenar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(198, 198, 198))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(44, 44, 44)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tbx_ruta_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_examinar1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                    .addComponent(tbxRutaArchivoEntrenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExaminarEntrenamiento))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btn_generar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEntrenar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
 
-        tabbedpane.addTab("Cargar archivo", panel1);
+        tabbedpane.addTab("Entrenamiento", panel1);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Ruta archivo prueba");
+        jLabel7.setText("Ruta archivo prueba:");
 
-        btn_examinar3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_examinar3.setText("Examinar");
-        btn_examinar3.addActionListener(new java.awt.event.ActionListener() {
+        tbxRutaArchivoPrueba.setEditable(false);
+
+        btnExaminarPrueba.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExaminarPrueba.setText("Examinar");
+        btnExaminarPrueba.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_examinar3ActionPerformed(evt);
+                btnExaminarPruebaActionPerformed(evt);
             }
         });
 
@@ -174,73 +174,68 @@ public class MenuP extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Ingresar frases de prueba:");
 
-        btn_generar1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_generar1.setLabel("Evaluar");
-        btn_generar1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnEvaluar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnEvaluar.setLabel("Evaluar");
+        btnEvaluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_generar1MouseClicked(evt);
+                btnEvaluarMouseClicked(evt);
             }
         });
-        btn_generar1.addActionListener(new java.awt.event.ActionListener() {
+        btnEvaluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_generar1ActionPerformed(evt);
+                btnEvaluarActionPerformed(evt);
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        taFrasesPrueba.setColumns(20);
+        taFrasesPrueba.setRows(5);
+        jScrollPane1.setViewportView(taFrasesPrueba);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnEvaluar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(203, 203, 203))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(tbxRutaArchivoPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tbx_ruta_archivo1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_examinar3)))
-                .addGap(21, 21, 21))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btn_generar1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(203, 203, 203))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                        .addComponent(btnExaminarPrueba))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(tbx_ruta_archivo1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_examinar3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jLabel8)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tbxRutaArchivoPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExaminarPrueba))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btn_generar1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEvaluar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
-        tabbedpane.addTab("CARGAR PRUEBA", jPanel1);
+        tabbedpane.addTab("Pruebas", jPanel1);
 
         jPanel3.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("RESULTADOS");
+        jLabel2.setText("INFERENCIAS");
 
         taResultados.setEditable(false);
         taResultados.setColumns(20);
@@ -254,14 +249,14 @@ public class MenuP extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(200, 200, 200)
                 .addComponent(jLabel2)
-                .addGap(208, 208, 208))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,20 +275,20 @@ public class MenuP extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(170, 170, 170)
+                .addContainerGap()
+                .addComponent(tabbedpane)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(190, 190, 190)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tabbedpane, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(19, 19, 19)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(tabbedpane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -301,11 +296,11 @@ public class MenuP extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbx_ruta_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbx_ruta_archivoActionPerformed
+    private void tbxRutaArchivoEntrenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbxRutaArchivoEntrenamientoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbx_ruta_archivoActionPerformed
+    }//GEN-LAST:event_tbxRutaArchivoEntrenamientoActionPerformed
 
-    private void btn_examinar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_examinar1ActionPerformed
+    private void btnExaminarEntrenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExaminarEntrenamientoActionPerformed
         // Se elige el archivo
 
         JFileChooser chooser = new JFileChooser();
@@ -314,21 +309,33 @@ public class MenuP extends javax.swing.JFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             ruta_archivo = chooser.getSelectedFile().toString();
         }
-        tbx_ruta_archivo.setText(ruta_archivo);
-    }//GEN-LAST:event_btn_examinar1ActionPerformed
+        tbxRutaArchivoEntrenamiento.setText(ruta_archivo);
+    }//GEN-LAST:event_btnExaminarEntrenamientoActionPerformed
 
-    private void btn_generarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_generarMouseClicked
+    private void btnEntrenarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEntrenarMouseClicked
         // Inicio del programa
-    }//GEN-LAST:event_btn_generarMouseClicked
+    }//GEN-LAST:event_btnEntrenarMouseClicked
 
-    private void btn_generarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarActionPerformed
+    private void btnEntrenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrenarActionPerformed
         // TODO add your handling code here:
 
-        archivo.CargarArchivo(ruta_archivo, ruta_carpeta);
-        archivo.LeerArchivo();
-    }//GEN-LAST:event_btn_generarActionPerformed
+        if(!ruta_archivo.equals("") | !taFrasesEntrenamiento.getText().trim().equals("")){
+            if(!ruta_archivo.equals("")){
+                archivo.CargarArchivo(ruta_archivo, ruta_carpeta);
+                archivo.LeerArchivo();
+            }
+            
+            if(!taFrasesEntrenamiento.getText().trim().equals("")){
+                archivo.leerFrases(taFrasesEntrenamiento.getText().trim());
+            }
+            
+            JOptionPane.showMessageDialog(null, "Entrenamiento realizado...");
+        }else{
+            JOptionPane.showMessageDialog(null, "No hay metodo de entrenamiento...");
+        }
+    }//GEN-LAST:event_btnEntrenarActionPerformed
 
-    private void btn_examinar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_examinar3ActionPerformed
+    private void btnExaminarPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExaminarPruebaActionPerformed
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Elegir archivo");
@@ -336,20 +343,35 @@ public class MenuP extends javax.swing.JFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             ruta_Prueba = chooser.getSelectedFile().toString();
         }
-        tbx_ruta_archivo1.setText(ruta_Prueba);
-    }//GEN-LAST:event_btn_examinar3ActionPerformed
+        tbxRutaArchivoPrueba.setText(ruta_Prueba);
+    }//GEN-LAST:event_btnExaminarPruebaActionPerformed
 
-    private void btn_generar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_generar1MouseClicked
+    private void btnEvaluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEvaluarMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn_generar1MouseClicked
+    }//GEN-LAST:event_btnEvaluarMouseClicked
 
-    private void btn_generar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generar1ActionPerformed
+    private void btnEvaluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluarActionPerformed
         // TODO add your handling code here:
         taResultados.setText("");
         archivo.salida = "";
-        archivo.pruebaArchivo(ruta_Prueba);
-        taResultados.append(archivo.salida);
-    }//GEN-LAST:event_btn_generar1ActionPerformed
+        
+        if(!ruta_Prueba.equals("") | !taFrasesPrueba.getText().trim().equals("")){
+            if(!ruta_Prueba.equals("")){
+                archivo.pruebaArchivo(ruta_Prueba);
+                taResultados.append(archivo.salida);
+            }
+            
+            if(!taFrasesPrueba.getText().trim().equals("")){
+                archivo.probarFrases(taFrasesPrueba.getText());
+                taResultados.append(archivo.salida);
+            }
+            
+            JOptionPane.showMessageDialog(null, "Análisis realizado...");
+        }else{
+            JOptionPane.showMessageDialog(null, "No hay pruebas a realizar...");
+        }
+        
+    }//GEN-LAST:event_btnEvaluarActionPerformed
     Archivo archivo = new Archivo();
     /**
      * @param args the command line arguments
@@ -387,14 +409,13 @@ public class MenuP extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_examinar1;
-    private javax.swing.JButton btn_examinar3;
-    private javax.swing.JButton btn_generar;
-    private javax.swing.JButton btn_generar1;
+    private javax.swing.JButton btnEntrenar;
+    private javax.swing.JButton btnEvaluar;
+    private javax.swing.JButton btnExaminarEntrenamiento;
+    private javax.swing.JButton btnExaminarPrueba;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -403,12 +424,12 @@ public class MenuP extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JPanel panel1;
+    private javax.swing.JTextArea taFrasesEntrenamiento;
+    private javax.swing.JTextArea taFrasesPrueba;
     private javax.swing.JTextArea taResultados;
     private javax.swing.JTabbedPane tabbedpane;
-    private javax.swing.JTextField tbx_ruta_archivo;
-    private javax.swing.JTextField tbx_ruta_archivo1;
+    private javax.swing.JTextField tbxRutaArchivoEntrenamiento;
+    private javax.swing.JTextField tbxRutaArchivoPrueba;
     // End of variables declaration//GEN-END:variables
 }
