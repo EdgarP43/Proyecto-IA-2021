@@ -7,14 +7,11 @@ package Clases;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
@@ -29,8 +26,7 @@ import java.util.Hashtable;
  */
 public class Archivo {
 
-    ArrayList<Lenguaje> hashLenguajes = new ArrayList<Lenguaje> ();
-    
+    ArrayList<Lenguaje> hashLenguajes = new ArrayList<> ();
     ArrayList Lenguajes = new ArrayList();
     public String ruta = "";
     public String carpeta_salida = "";
@@ -58,6 +54,7 @@ public class Archivo {
             System.exit(0);
         }
     }
+    
     //Método para leer el archivo
     public void EntrenarArchivo(){
         String[] frase;
@@ -88,7 +85,7 @@ public class Archivo {
                     MeterPalabrasEnBoW();
                 }
             }
-        }catch (Exception e){
+        }catch (IOException e){
             JOptionPane.showMessageDialog(null, "Error al intentar abrir el archivo", "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -195,7 +192,7 @@ public class Archivo {
     
     int ProbaActual =0;
     // Método pendiente de evaluar
-    public void generarInferencia(String palabraEntrada)
+    public void GenerarInferencia(String palabraEntrada)
     {   // Veces totales que ha aparecido esa palabra en todos los datos
         BigDecimal contPalabraTotal = BigDecimal.valueOf(0);
         //Por cada lenguaje evalua si la palabra pertenece, si pertenece se suma su frecuencia
@@ -257,12 +254,8 @@ public class Archivo {
     ArrayList<String> Escritor = new ArrayList<>();
     public void EvaluarArchivo(String Ruta) 
     {
-        String ORIGINAL = "ÁáÉéÍíÓóÚúÑñÜü";
-        String REPLACEMENT= "AaEeIiOoUuNnUu";
-    
         try 
         {
-           
           fr = new FileReader(Ruta);
           BufferedReader bf = new BufferedReader(fr);
 
@@ -270,15 +263,18 @@ public class Archivo {
          //Evaluamos la frase completa
           while((linea = bf.readLine()) != null)
           {
-                linea = linea.toLowerCase();
-                
+              linea = linea.trim().toLowerCase();
+              
               //Separamos cada palabra de la frase
               String[] pa = linea.split(" ");
+              
               for (int i = 0; i < pa.length; i++) 
               {
-                  pa[i] = pa[i].toLowerCase().trim();
-                  //Enviamos palabra al metodo para generar las probabilidades
-                  generarInferencia(pa[i]);   
+                  if(!pa[i].equals("")){
+                      pa[i] = pa[i].toLowerCase().trim();
+                      //Enviamos palabra al metodo para generar las probabilidades
+                      GenerarInferencia(pa[i]);   
+                  }
               }
               //Evaluar que lenguaje tiene más elementos
                ProbaActual = 0;
@@ -332,7 +328,7 @@ public class Archivo {
         fr.close();
         
         //Escritura del archivo de salida
-        File archivo = new File("Salida.txt");
+        File archivo = new File("Retroalimentacion.txt");
         BufferedWriter bw;
         if(archivo.exists()) 
         {
@@ -356,24 +352,12 @@ public class Archivo {
         }
         
         bw.close();
-        CargarArchivo("Salida.txt", "Entrada");
+        CargarArchivo("Retroalimentacion.txt", "Entrada");
         EntrenarArchivo();
         }
         catch(Exception e) 
         {
           System.out.println("Excepcion leyendo fichero"  + e);
-        }
-    }
-    
-    public void EvaluarArchivoSimple(String ruta){
-        try{
-            fr = new FileReader(ruta);
-            BufferedReader bf = new BufferedReader(fr);
-            
-            
-            
-        }catch (Exception e){
-            
         }
     }
     
@@ -388,7 +372,7 @@ public class Archivo {
             
             for (String p: palabrasEnFrase){
                 if(!p.equals("")){
-                    generarInferencia(p);
+                    GenerarInferencia(p);
                 }
             }
             
@@ -443,7 +427,7 @@ public class Archivo {
         }
         
         try{
-            File archivo = new File("Salida.txt");
+            File archivo = new File("Retroalimentacion.txt");
             BufferedWriter bw;
             if(archivo.exists()) 
             {
@@ -467,7 +451,7 @@ public class Archivo {
             }
 
             bw.close();
-            CargarArchivo("Salida.txt", "Entrada");
+            CargarArchivo("Retroalimentacion.txt", "Entrada");
             EntrenarArchivo();
         }
         catch(Exception e){
