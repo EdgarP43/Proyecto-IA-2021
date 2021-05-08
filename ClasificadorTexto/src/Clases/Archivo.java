@@ -39,8 +39,8 @@ public class Archivo {
     public BigDecimal  frasesTotales = BigDecimal.valueOf(0);
     public BigDecimal  palabrasTotales = BigDecimal.valueOf(0);
     public String salida = "";
-    public Hashtable<String, BigDecimal> probabilidades = new Hashtable<>();
-    public Hashtable<String, BigDecimal> probabilidades2 = new Hashtable<>();
+    public Hashtable<String, BigDecimal> probConjunta = new Hashtable<>();
+    public Hashtable<String, BigDecimal> probLenguajes = new Hashtable<>();
    
     //Metodo para cargar el archivo
     public void CargarArchivo(String Ruta, String salida) {
@@ -223,22 +223,21 @@ public class Archivo {
                 //Lo divide dentro de la probabilidad de la palabra (conteo de la palabra dividido frases totales)
                 Total =   Total.divide(contPalabraTotal.divide(palabrasTotales,100, RoundingMode.HALF_UP),100, RoundingMode.HALF_UP);
                 
-                if (probabilidades.isEmpty()) 
+                if (probConjunta.isEmpty()) 
                 {
-                    probabilidades.put(hashLenguajes.get(i).nombre, Total);
+                    probConjunta.put(hashLenguajes.get(i).nombre, Total);
                 }
                 else
                 {
                    
-                    if(probabilidades.containsKey(hashLenguajes.get(i).nombre))
+                    if(probConjunta.containsKey(hashLenguajes.get(i).nombre))
                     {
-                        // esto es para multiplicar si esa emocion ya tenia una probabilidad hay que multiplicarla
-                       probabilidades.replace(hashLenguajes.get(i).nombre, probabilidades.get(hashLenguajes.get(i).nombre).multiply(Total,MathContext.DECIMAL128));
-
+                        //Se multiplican las probabilidades conjuntas
+                       probConjunta.replace(hashLenguajes.get(i).nombre, probConjunta.get(hashLenguajes.get(i).nombre).multiply(Total,MathContext.DECIMAL128));
                     }
                     else
                     {
-                        probabilidades.put(hashLenguajes.get(i).nombre, Total);
+                        probConjunta.put(hashLenguajes.get(i).nombre, Total);
                         
                     }
 
@@ -272,50 +271,62 @@ public class Archivo {
               {
                   if(!pa[i].equals("")){
                       pa[i] = pa[i].toLowerCase().trim();
-                      //Enviamos palabra al metodo para generar las probabilidades
+                      //Enviamos palabra al metodo para generar las probConjunta
                       GenerarInferencia(pa[i]);   
                   }
               }
               //Evaluar que lenguaje tiene más elementos
                ProbaActual = 0;
+               BigDecimal mayor = BigDecimal.valueOf(0);
                BigDecimal Deno = BigDecimal.valueOf(0);
-               Enumeration e = probabilidades.keys();
+               Enumeration e = probConjunta.keys();
                 while (e.hasMoreElements()) 
                 {
                   String key = (String) e.nextElement();
-                  Deno = Deno.add(probabilidades.get(key),MathContext.DECIMAL128);
+                  Deno = Deno.add(probConjunta.get(key),MathContext.DECIMAL128);
                 }
-                e = probabilidades.keys();
+                e = probConjunta.keys();
                 String lenguajeGuardado = "";
                 BigDecimal Var1 = new BigDecimal(0);
                 while (e.hasMoreElements()) 
                 {
                    String key = (String) e.nextElement();
                    
-                   BigDecimal Var2 = probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP);
-                   if(probabilidades2.isEmpty())
+                   BigDecimal Var2 = probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP);
+                   if(probLenguajes.isEmpty())
                    {
                        lenguajeGuardado = key.trim();
                        
-                       probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
-                       Var1 = probabilidades2.get(lenguajeGuardado);
+                       probLenguajes.put(key, probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+                       Var1 = probLenguajes.get(lenguajeGuardado);
                    }
-                   else if(Var1.compareTo(Var2) == -1)
+                   else
                    {
-                       probabilidades2 = new Hashtable<>();
-                       lenguajeGuardado = key ;
-                       probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+                       probLenguajes.put(key, probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP));
                    }
+                }
+                ProbaActual = 0;
+                    
+                Enumeration enume = probLenguajes.keys();
+                while (enume.hasMoreElements()) 
+                {
+                    String llave = (String) enume.nextElement();
 
+                    BigDecimal valor = probLenguajes.get(llave);
+                    if(valor.compareTo(mayor) == 1)
+                    {
+                        mayor = valor;
+                        lenguajeGuardado = llave;
+                    }
                 }
                 if(!lenguajeGuardado.equals(""))
                 {
-                    String temp = linea + " | " + lenguajeGuardado +" con una probabilidad de: "+( probabilidades2.get(lenguajeGuardado));
+                    String temp = linea + " | " + lenguajeGuardado +" con una probabilidad de: "+ mayor.toPlainString();
                     System.out.println(temp);
                     salida += "• " + temp + "\r\n \r\n";
                     Escritor.add(linea + " | "+  lenguajeGuardado);
-                    probabilidades = new Hashtable<>();
-                    probabilidades2 = new Hashtable<>(); 
+                    probConjunta = new Hashtable<>();
+                    probLenguajes = new Hashtable<>(); 
                 }
                 else
                 {
@@ -378,14 +389,14 @@ public class Archivo {
             
             ProbaActual = 0;
             BigDecimal Deno = BigDecimal.valueOf(0);
-            Enumeration e = probabilidades.keys();
+            Enumeration e = probConjunta.keys();
 
             while (e.hasMoreElements()) 
             {
               String key = (String) e.nextElement();
-              Deno = Deno.add(probabilidades.get(key),MathContext.DECIMAL128);
+              Deno = Deno.add(probConjunta.get(key),MathContext.DECIMAL128);
             }
-            e = probabilidades.keys();
+            e = probConjunta.keys();
             String lenguajeGuardado = "";
             BigDecimal Var1 = new BigDecimal(0);
 
@@ -393,30 +404,30 @@ public class Archivo {
             {
                String key = (String) e.nextElement();
 
-               BigDecimal Var2 = probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP);
-               if(probabilidades2.isEmpty())
+               BigDecimal Var2 = probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP);
+               if(probLenguajes.isEmpty())
                {
                    lenguajeGuardado = key;
 
-                   probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
-                   Var1 = probabilidades2.get(lenguajeGuardado);
+                   probLenguajes.put(key, probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+                   Var1 = probLenguajes.get(lenguajeGuardado);
                }
                else if(Var1.compareTo(Var2) == -1)
                {
-                   probabilidades2 = new Hashtable<>();
+                   probLenguajes = new Hashtable<>();
                    lenguajeGuardado = key.trim();
-                   probabilidades2.put(key, probabilidades.get(key).divide(Deno,20, RoundingMode.HALF_UP));
+                   probLenguajes.put(key, probConjunta.get(key).divide(Deno,20, RoundingMode.HALF_UP));
                }
 
             }
             if(!lenguajeGuardado.equals(""))
             {
-                String temp = f + " | " + lenguajeGuardado +" con una probabilidad de: " + ( probabilidades2.get(lenguajeGuardado));
+                String temp = f + " | " + lenguajeGuardado +" con una probabilidad de: " + ( probLenguajes.get(lenguajeGuardado));
                 System.out.println(temp);
                 salida += "• " + temp + "\r\n \r\n";
                 Escritor.add(f + " | "+  lenguajeGuardado);
-                probabilidades = new Hashtable<>();
-                probabilidades2 = new Hashtable<>(); 
+                probConjunta = new Hashtable<>();
+                probLenguajes = new Hashtable<>(); 
             }
             else
             {
