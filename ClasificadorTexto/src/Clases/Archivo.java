@@ -59,123 +59,66 @@ public class Archivo {
         }
     }
     //Método para leer el archivo
-    public void LeerArchivo() {
-        LeerCaracter(fr);
-        IgnorarEspacios(fr);
-
-        while (caracter != -1) 
-        {
-            // Array para guardar palabras de la oracion
-            palabras = new ArrayList<>();
-            
-            // Obtener todas las palabras antes de |
-            while ((char) caracter != '|') {
-                // Cada palabra se agrega al array
-                palabras.add(ObtenerPalabra(fr).toLowerCase().trim());
-                palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(1));
+    public void EntrenarArchivo(){
+        String[] frase;
+        String[] palabrasEnFrase;
+        
+        BufferedReader br = new BufferedReader(fr);
+        String linea = "";
+        
+        try{
+            while((linea = br.readLine()) != null){
+                if(linea.contains("|")){
+                    linea = linea.toLowerCase().trim();
+                    frase = linea.split("\\|");
+                    
+                    palabras = new ArrayList<>();
+                    palabrasEnFrase = frase[0].trim().split(" ");
+                    
+                    for(String palabra: palabrasEnFrase){
+                        if(!palabra.equals("")){
+                            palabras.add(palabra.trim());
+                            palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(1));
+                        }
+                    }
+                    
+                    bowactual = frase[1].trim();
+                    
+                    CrearBoW();
+                    MeterPalabrasEnBoW();
+                }
             }
-            LeerCaracter(fr);
-            IgnorarEspacios(fr);
-            
-            // Se obtiene la palabra que esta despues del | (lenguaje)
-            bowactual = ObtenerPalabra(fr);
-            
-            // Crear esa bag of words
-            CrearBoW();
-            MeterPalabrasEnBoW();
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Error al intentar abrir el archivo", "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    public void leerFrases(String frases){
+    public void EntrenarFrases(String frases){
         String[] frasesEntrenamiento;
         String[] frase;
         String[] palabrasEnFrase;
         
         frasesEntrenamiento = frases.trim().toLowerCase().split("\n");
         
-        for (int i = 0; i < frasesEntrenamiento.length; i++) {
+        for (String linea: frasesEntrenamiento) {
             palabras = new ArrayList<>();
             
-            frase = frasesEntrenamiento[i].split("\\|");
-            palabrasEnFrase = frase[0].trim().split(" ");
-            
-            palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(palabrasEnFrase.length));
-            bowactual = frase[1].trim();
-            
-            for (int j = 0; j < palabrasEnFrase.length; j++) {
-                if(!palabrasEnFrase[j].equals("")){
-                    palabras.add(palabrasEnFrase[j]);
-                }
-                
-            }
-            
-            CrearBoW();
-            MeterPalabrasEnBoW();
-        }
-    }
-    
-    // lee un caracterer
-    public void LeerCaracter(FileReader fr) {
-        try {
-            caracter = fr.read();
-            if ((char) caracter == '\n') {
-                columna = 0;
-                linea++;
-            } else {
-                columna++;
-            }
+            if(linea.contains("|")){
+                frase = linea.split("\\|");
+                palabrasEnFrase = frase[0].trim().split(" ");
 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo",
-                    "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-    }
+                palabrasTotales = palabrasTotales.add(BigDecimal.valueOf(palabrasEnFrase.length));
+                bowactual = frase[1].trim();
 
-    // hace que el caracterer actual (caracter) sea diferente a un espacio
-    public void IgnorarEspacios(FileReader fr) {
-        try {
-            while ((char) caracter == ' ' | (char) caracter == '\r' | (char) caracter == '\n' | (char) caracter == '\t' | caracter == 65279) {
-                LeerCaracter(fr);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo del fichero",
-                    "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
-            //System.out.println("Error de pruebaArchivo del fichero");
-            System.exit(1);
-        }
-    }
-    
-    // obtiene la palabra entre dos espacios
-    public String ObtenerPalabra(FileReader fr) {
-        String palabra = "";
-        String ORIGINAL = "ÁáÉéÍíÓóÚúÑñÜü";
-        String REPLACEMENT= "AaEeIiOoUuNnUu";
-        try {
-            while ((char) caracter != ' ' & (char) caracter != '\r' & (char) caracter != '\n' & (char) caracter != '\t'  & (char) caracter != '\uffff' & (char) caracter != '|') {
-                if ((char) caracter != 44 ) 
-                {   
-                    if ((char) caracter != 44)
-                    {
-                      palabra += (char) caracter;
-                      LeerCaracter(fr);
-                    }else
-                    {
-                    LeerCaracter(fr);
-                    }                    
-                }else
-                {
-                LeerCaracter(fr);
+                for (String palabra: palabrasEnFrase) {
+                    if(!palabra.equals("")){
+                        palabras.add(palabra);
+                    }
                 }
 
-            } 
-            IgnorarEspacios(fr);
-            return palabra;
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error de pruebaArchivo",
-                    "Error apertura de archivo", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-            return "";
+                CrearBoW();
+                MeterPalabrasEnBoW();
+            }
         }
     }
     
@@ -312,7 +255,7 @@ public class Archivo {
     }
     
     ArrayList<String> Escritor = new ArrayList<>();
-    public void pruebaArchivo(String Ruta) 
+    public void EvaluarArchivo(String Ruta) 
     {
         String ORIGINAL = "ÁáÉéÍíÓóÚúÑñÜü";
         String REPLACEMENT= "AaEeIiOoUuNnUu";
@@ -414,7 +357,7 @@ public class Archivo {
         
         bw.close();
         CargarArchivo("Salida.txt", "Entrada");
-        LeerArchivo();
+        EntrenarArchivo();
         }
         catch(Exception e) 
         {
@@ -422,7 +365,19 @@ public class Archivo {
         }
     }
     
-    public void probarFrases(String frasesPrueba){
+    public void EvaluarArchivoSimple(String ruta){
+        try{
+            fr = new FileReader(ruta);
+            BufferedReader bf = new BufferedReader(fr);
+            
+            
+            
+        }catch (Exception e){
+            
+        }
+    }
+    
+    public void EvaluarFrases(String frasesPrueba){
         String[] frases;
         String[] palabrasEnFrase;
         frases = frasesPrueba.trim().toLowerCase().split("\n");
@@ -513,7 +468,7 @@ public class Archivo {
 
             bw.close();
             CargarArchivo("Salida.txt", "Entrada");
-            LeerArchivo();
+            EntrenarArchivo();
         }
         catch(Exception e){
           System.out.println("Excepcion leyendo fichero"  + e);

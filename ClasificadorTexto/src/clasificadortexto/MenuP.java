@@ -322,11 +322,11 @@ public class MenuP extends javax.swing.JFrame {
         if(!ruta_archivo.equals("") | !taFrasesEntrenamiento.getText().trim().equals("")){
             if(!ruta_archivo.equals("")){
                 archivo.CargarArchivo(ruta_archivo, ruta_carpeta);
-                archivo.LeerArchivo();
+                archivo.EntrenarArchivo();
             }
             
             if(!taFrasesEntrenamiento.getText().trim().equals("")){
-                archivo.leerFrases(taFrasesEntrenamiento.getText().trim());
+                archivo.EntrenarFrases(taFrasesEntrenamiento.getText().trim());
             }
             
             JOptionPane.showMessageDialog(null, "Entrenamiento realizado...");
@@ -357,12 +357,12 @@ public class MenuP extends javax.swing.JFrame {
         
         if(!ruta_Prueba.equals("") | !taFrasesPrueba.getText().trim().equals("")){
             if(!ruta_Prueba.equals("")){
-                archivo.pruebaArchivo(ruta_Prueba);
+                archivo.EvaluarArchivo(ruta_Prueba);
                 taResultados.append(archivo.salida);
             }
             
             if(!taFrasesPrueba.getText().trim().equals("")){
-                archivo.probarFrases(taFrasesPrueba.getText());
+                archivo.EvaluarFrases(taFrasesPrueba.getText());
                 taResultados.append(archivo.salida);
             }
             
